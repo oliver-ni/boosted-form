@@ -2,6 +2,7 @@ let app = new Vue({
     el: '#idForm',
     data: {
         form: form,
+        loading: false,
     },
     methods: {
         checkCriteria(question) {
@@ -33,18 +34,46 @@ let app = new Vue({
                 console.log("test")
 
                 if (!idQ.socialSec) {
-                    return `/get_url/ssn_card/${state.answer}`;
+                    return `/get_url/ssn_card/FE`;
                 } else if (!idQ.stateID) {
                     return `/get_url/state_id/${state.answer}`;
                 } else if (!idQ.passport) {
-                    return `/get_url/us_passport/${state.answer}`;
+                    return `/get_url/us_passport/FE`;
                 }
+
+            } else if (path == 1) {
+
+                const state = this.form.find(q => q.name == "docsState");
+                return `/get_url/state_id/${state.answer}`;
+
+            } else if (path == 2) {
+
+                let country = this.form.find(q => q.name == "docsCountry").answer;
+                country = country.toLowerCase().replace(/ /g, "-");
+                return `/get_embassy/${country}`;
+
+            } else if (path == 3) {
+                const state = this.form.find(q => q.name == "bornState");
+                return `/get_url/vital_records/${state.answer}`;
+            } else if (path == 4) {
+
+                let country = this.form.find(q => q.name == "bornCountry").answer;
+                country = country.toLowerCase().replace(/ /g, "-");
+                return `/get_embassy/${country}`;
 
             }
 
         },
         doRequest(path) {
-            const a = getRequest(path);
+            const a = this.getRequest(path);
+            this.loading = true;
+            axios.get(`http://167.71.116.162${a}`).then((res) => {
+
+                this.loading = false;
+
+                window.location.href = res.data;
+
+            });
         }
     }
 });

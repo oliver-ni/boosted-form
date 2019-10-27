@@ -22,14 +22,14 @@
         <form>
 
             <div v-for="question in form" v-if="checkCriteria(question)" class="question">
-                {{ question.question }}
+                <h2>{{ question.question }}</h2>
                 <div v-if="question.type == 'boolean'">
-                    <input type="radio" :value="true" v-model="question.answer"> Yes
-                    <input type="radio" :value="false" v-model="question.answer"> No
+                    <p><input type="radio" :value="true" v-model="question.answer"> Yes</p>
+                    <p><input type="radio" :value="false" v-model="question.answer"> No</p>
                 </div>
                 <div v-if="question.type == 'list'">
                     <div v-for="choice in question.choices">
-                        <input v-model="choice.answer" type="checkbox"> {{ choice.text }}
+                        <p><input v-model="choice.answer" type="checkbox"> {{ choice.text }}</p>
                     </div>
                 </div>
                 <div v-if="question.type == 'state'">
@@ -310,11 +310,16 @@
             </div>
 
         </form>
+
+        <div v-if="loading == true">Loading...</div>
+
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="./form.js"></script>
     <script src="./main.js"></script>
+    
 
 </body>
 
